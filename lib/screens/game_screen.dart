@@ -427,7 +427,11 @@ class _GameScreenState extends State<GameScreen> {
 
   /// Escritorio o tablet en horizontal: tablero a la izquierda, panel a la derecha.
   Widget _buildWide(BoxConstraints c, TileStyle style, bool animate) {
-    final extent = (c.maxHeight - 48).clamp(240.0, 680.0);
+    // 48 de margen y 292 del panel lateral (260 + separacion).
+    final extent = min(
+      c.maxHeight - 48,
+      c.maxWidth - 48 - 292,
+    ).clamp(240.0, 680.0);
 
     return Center(
       child: Padding(
