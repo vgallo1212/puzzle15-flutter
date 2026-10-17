@@ -10,6 +10,7 @@ import '../widgets/game_logo.dart';
 import '../widgets/menu_button.dart';
 import 'game_screen.dart';
 import 'instructions_screen.dart';
+import 'scores_screen.dart';
 import 'settings_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -121,6 +122,17 @@ class MenuScreen extends StatelessWidget {
                           )
                         else
                           const SizedBox(height: 14),
+                        Entrance(
+                          delay: const Duration(milliseconds: 300),
+                          child: MenuButton(
+                            icon: Icons.emoji_events_rounded,
+                            label: 'Marcadores',
+                            subtitle: 'Tus mejores partidas',
+                            onPressed: () =>
+                                _open(context, const ScoresScreen()),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
                         Entrance(
                           delay: const Duration(milliseconds: 400),
                           child: MenuButton(
