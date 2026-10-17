@@ -46,3 +46,7 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Herramientas de la PWA
+tool/pwa/node_modules/
+tool/pwa/package-lock.json
