@@ -1,0 +1,71 @@
+name: Build y despliegue web
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BASE_HREF: /${{ github.event.repository.name }}/
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.7
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get
+
+      - name: Analisis
+        run: flutter analyze
+
+      - name: Tests
+        run: flutter test
+
+      - name: Compilar web
+        # --no-web-resources-cdn deja CanvasKit dentro de la app para que
+        # funcione sin conexion.
+        run: flutter build web --release --no-web-resources-cdn --base-href "$BASE_HREF"
+
+      - name: Generar service worker
+        run: node tool/pwa/generate_sw.js build/web
+
+      - name: Verificar PWA
+        run: |
+          npm install --no-save --prefix tool/pwa puppeteer-core@23.11.1
+          export NODE_PATH="$PWD/tool/pwa/node_modules"
+          export CHROME_PATH="$(which google-chrome)"
+          node tool/pwa/check_pwa.js build/web "$BASE_HREF"
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
