@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
-import 'screens/game_screen.dart';
+import 'screens/splash_screen.dart';
 import 'services/scores_repository.dart';
 import 'services/settings_controller.dart';
 import 'theme/app_theme.dart';
@@ -31,7 +31,7 @@ class PuzzleApp extends StatelessWidget {
             themeAnimationDuration: settings.animations
                 ? const Duration(milliseconds: 300)
                 : Duration.zero,
-            home: GameScreen(difficulty: settings.difficulty),
+            home: const SplashScreen(),
           );
         },
       ),
