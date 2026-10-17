@@ -10,6 +10,7 @@ import '../widgets/game_logo.dart';
 import '../widgets/menu_button.dart';
 import 'game_screen.dart';
 import 'instructions_screen.dart';
+import 'settings_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -120,6 +121,17 @@ class MenuScreen extends StatelessWidget {
                           )
                         else
                           const SizedBox(height: 14),
+                        Entrance(
+                          delay: const Duration(milliseconds: 400),
+                          child: MenuButton(
+                            icon: Icons.tune_rounded,
+                            label: 'Configuración',
+                            subtitle: 'Dificultad, tema y estilo',
+                            onPressed: () =>
+                                _open(context, const SettingsScreen()),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
                         Entrance(
                           delay: const Duration(milliseconds: 500),
                           child: MenuButton(
