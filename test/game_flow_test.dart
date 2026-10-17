@@ -82,4 +82,15 @@ void main() {
     expect(scores.isEmpty, isTrue);
   });
 
+  testWidgets('en tablet horizontal el tablero y el panel caben', (
+    tester,
+  ) async {
+    await pumpGame(
+      tester,
+      PuzzleBoard.fromList(3, [1, 2, 3, 4, 5, 6, 7, 0, 8]),
+      screen: const Size(800, 600),
+    );
+    expect(tester.takeException(), isNull);
+    expect(find.text('Mezclar'), findsOneWidget);
+  });
 }
